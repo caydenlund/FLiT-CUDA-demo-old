@@ -61,12 +61,12 @@ tar xf ${PACKAGE_FILENAME}
 mv ${TAR_DIRNAME} ${PACKAGE}
 mkdir -p ${PACKAGE}/build
 pushd ${PACKAGE}/build
-cmake .. -CMAKE_CUDA_ARCHITECTURES="60;70"
-# make
+cmake ..
+make
 popd
 
 popd
 
 echo
-echo "Setup complete on $(date)." | tee ${SUCCESS_LOG}
+echo "Setup completed on $(date)." | tee ${SUCCESS_LOG}
 echo
