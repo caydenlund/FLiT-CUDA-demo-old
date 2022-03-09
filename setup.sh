@@ -55,15 +55,11 @@ fi
 mkdir -p ${PACKAGES_DIR}
 pushd ${PACKAGES_DIR}
 
+# Fetch and extract the MatX package.
 rm -rf ${PACKAGE}
 wget -c ${PACKAGE_URL} -O ${PACKAGE_FILENAME}
 tar xf ${PACKAGE_FILENAME}
 mv ${TAR_DIRNAME} ${PACKAGE}
-mkdir -p ${PACKAGE}/build
-pushd ${PACKAGE}/build
-cmake ..
-make
-popd
 
 popd
 
