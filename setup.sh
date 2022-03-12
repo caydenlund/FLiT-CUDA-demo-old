@@ -31,7 +31,7 @@ Usage:
 
 Description:
     Performs initial setup of the dependent packages used in the demo
-    of FLiT running on CUDA. It will download ${PACKAGE} and configure it.
+    of FLiT running on CUDA. It will download ${PACKAGE} and extract it.
 "
         exit 0
         ;;
