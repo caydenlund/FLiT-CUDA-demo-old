@@ -1,0 +1,24 @@
+[run]
+enable_mpi = true
+
+[dev_build]
+compiler_name = 'nvcc'
+optimization_level = '-O3'
+switches = ''
+
+[ground_truth]
+compiler_name = 'nvcc'
+optimization_level = '-O2'
+switches = ''
+
+[[compiler]]
+binary = './nvcc-wrapper.py'
+name = 'nvcc'
+optimization_levels = [
+  '-O2',
+  '-O3',
+]
+switches_list = [
+    ''
+]
+type = 'nvcc'
