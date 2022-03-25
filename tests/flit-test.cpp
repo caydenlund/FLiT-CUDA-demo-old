@@ -35,9 +35,9 @@ using void_t = void;
 FLIT_REGISTER_MAIN(cuda_matx_main);
 
 template <typename T>
-class Mfem13 : public flit::TestBase<T> {
+class Convolution : public flit::TestBase<T> {
    public:
-    Mfem13(std::string id) : flit::TestBase<T>(std::move(id)) {}
+    Convolution(std::string id) : flit::TestBase<T>(std::move(id)) {}
     virtual size_t getInputsPerRun() override { return 0; }
     virtual std::vector<T> getDefaultInput() override { return {}; }
 
@@ -87,19 +87,14 @@ class Mfem13 : public flit::TestBase<T> {
 
 // Only implement the test for double precision
 template <>
-flit::Variant Mfem13<double>::run_impl(const std::vector<double> &ti) {
+flit::Variant Convolution<double>::run_impl(const std::vector<double> &ti) {
     FLIT_UNUSED(ti);
 
-    // Run in a temporary directory so output files don't clash
-    std::string start_dir = flit::curdir();
-    flit::TempDir exec_dir;
-    flit::PushDir pusher(exec_dir.name());
-
-    // Run the example's main under MPI
+    // Run the example's main().
     auto meshfile = flit::join(start_dir, "data", "beam-tet.mesh");
     auto result =
         flit::call_mpi_main(cuda_matx_main, "mpirun -n 1 --bind-to none",
-                            "Mfem13", "--no-visualization --mesh " + meshfile);
+                        "Convolution", "--no-visualization --mesh " + meshfile);
 
     // Output debugging information
     std::ostream &out = flit::info_stream;
@@ -109,30 +104,8 @@ flit::Variant Mfem13<double>::run_impl(const std::vector<double> &ti) {
     out.flush();
 
     if (result.ret != 0) {
-        throw std::logic_error("Failed to run my main correctly");
+        throw std::logic_error("Failed to run main() correctly.");
     }
-
-    // We will be returning a vector of strings that hold the mesh data
-    std::vector<std::string> retval;
-
-    // Get the mesh
-    ostringstream mesh_name;
-    mesh_name << "mesh." << setfill('0') << setw(6) << 0;
-    std::string mesh_str = flit::readfile(mesh_name.str());
-    retval.emplace_back(mesh_str);
-
-    // Read calculated values
-    for (int i = 0; i < 5; i++) {
-        ostringstream mode_name;
-        mode_name << "mode_" << setfill('0') << setw(2) << i << "."
-                  << setfill('0') << setw(6) << 0;
-        std::string mode_str = flit::readfile(mode_name.str());
-
-        retval.emplace_back(mode_str);
-    }
-
-    // Return the mesh and mode files as strings
-    return flit::Variant(retval);
 }
 
-REGISTER_TYPE(Mfem13)
+REGISTER_TYPE(Convolution)

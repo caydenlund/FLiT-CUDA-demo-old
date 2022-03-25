@@ -69,7 +69,7 @@ ALL_DIRS        += $(RUNBUILD_DIR)
 
 # This flag specifies NOT to build position-independent executables
 CXXFLAGS        += -fno-pie
-CXXFLAGS        += -std=c++17
+CXXFLAGS        += -std=c++11
 CXXFLAGS        += -I.
 CXXFLAGS        += -I$(FLIT_INC_DIR)
 
